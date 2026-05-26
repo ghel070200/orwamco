@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORWAMCO – O'Donnell Resettlement Waterworks Multipurpose Cooperative</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C41E1E;
+    --gold: #E8A900;
+    --deep: #0D1117;
+    --mist: #F4F7FA;
+    --slate: #5A6472;
+    --white: #FFFFFF;
+    --water: #1A6FA8;
+    --water-light: #D6EAF8;
+    --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--mist);
+    color: var(--deep);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    transition: box-shadow var(--transition);
+  }
+  nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.08); }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.75rem; text-decoration: none;
+  }
+  .nav-logo img { height: 44px; width: 44px; object-fit: contain; }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-text span:first-child {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; font-size: 1.15rem; color: var(--red);
+    letter-spacing: 0.04em;
+  }
+  .nav-logo-text span:last-child {
+    font-size: 0.65rem; color: var(--slate); letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 500;
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    color: var(--slate); letter-spacing: 0.08em; text-transform: uppercase;
+    position: relative; padding-bottom: 2px; transition: color var(--transition);
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1.5px; background: var(--red);
+    transition: width var(--transition);
+  }
+  .nav-links a:hover { color: var(--red); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--red); color: var(--white) !important;
+    padding: 0.6rem 1.4rem; border-radius: 2px;
+    font-size: 0.82rem !important; letter-spacing: 0.1em !important;
+    transition: background var(--transition) !important;
+  }
+  .nav-cta:hover { background: #a01818 !important; color: var(--white) !important; }
+  .nav-cta::after { display: none !important; }
+
+  .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--deep); transition: var(--transition); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #fff 55%, var(--water-light) 100%);
+  }
+  .hero-bg::before {
+    content: ''; position: absolute;
+    bottom: -80px; right: -80px; width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,111,168,0.08), transparent 70%);
+  }
+  .hero-bg::after {
+    content: ''; position: absolute;
+    top: 60px; left: 30%; width: 1px; height: 60%;
+    background: linear-gradient(to bottom, transparent, rgba(196,30,30,0.12), transparent);
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); font-weight: 500; margin-bottom: 1.5rem;
+  }
+  .hero-tag::before {
+    content: ''; width: 30px; height: 1px; background: var(--red);
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05;
+    font-weight: 900; margin-bottom: 1.5rem; color: var(--deep);
+  }
+  h1 em { font-style: normal; color: var(--red); }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--slate); line-height: 1.8;
+    max-width: 480px; margin-bottom: 2.5rem; font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--red); color: var(--white);
+    padding: 0.9rem 2rem; border-radius: 2px;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #a01818; transform: translateY(-2px); }
+  .btn-outline {
+    border: 1.5px solid var(--deep); color: var(--deep);
+    padding: 0.9rem 2rem; border-radius: 2px;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all var(--transition); display: inline-block;
+  }
+  .btn-outline:hover { background: var(--deep); color: var(--white); transform: translateY(-2px); }
+
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .hero-logo-wrap {
+    position: relative;
+  }
+  .hero-logo-wrap::before {
+    content: ''; position: absolute; inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,169,0,0.1), transparent 70%);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  .hero-logo-wrap img {
+    width: clamp(220px, 28vw, 380px);
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.12));
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
+  .hero-stats {
+    position: absolute; bottom: 3rem; left: 4rem; right: 4rem;
+    display: flex; gap: 3rem; z-index: 1;
+    border-top: 1px solid rgba(0,0,0,0.08); padding-top: 2rem;
+  }
+  .stat { display: flex; flex-direction: column; gap: 0.2rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900; color: var(--red); line-height: 1;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--slate); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── SECTIONS COMMON ── */
+  section { padding: 7rem 4rem; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); font-weight: 500; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--red); }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; line-height: 1.1;
+    margin-bottom: 1.2rem; color: var(--deep);
+  }
+  h2 em { font-style: normal; color: var(--red); }
+
+  /* ── ABOUT ── */
+  #about { background: var(--white); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .about-img-block { position: relative; }
+  .about-img-block::before {
+    content: ''; position: absolute; top: -20px; left: -20px;
+    width: 60%; height: 60%; border: 2px solid var(--gold); z-index: 0;
+    border-radius: 2px;
+  }
+  .about-img-inner {
+    position: relative; z-index: 1;
+    background: linear-gradient(135deg, var(--water-light), #e8f4fd);
+    border-radius: 2px; padding: 3rem 2rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+    border: 1px solid rgba(26,111,168,0.15);
+  }
+  .about-icon-row { display: flex; gap: 1.5rem; }
+  .about-icon {
+    width: 56px; height: 56px; border-radius: 2px;
+    background: var(--white); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    font-size: 1.6rem;
+  }
+  .about-badge {
+    background: var(--red); color: var(--white);
+    padding: 0.5rem 1rem; border-radius: 2px; display: inline-block;
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+    align-self: flex-start;
+  }
+  .about-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: var(--water); line-height: 1.6;
+    font-style: italic;
+  }
+
+  .about-text p {
+    color: var(--slate); line-height: 1.9; margin-bottom: 1.5rem;
+    font-size: 0.98rem; font-weight: 300;
+  }
+  .about-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .pill {
+    border: 1px solid rgba(0,0,0,0.12); padding: 0.4rem 0.9rem;
+    border-radius: 100px; font-size: 0.75rem; color: var(--slate);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--mist); }
+  .services-header { max-width: 600px; margin-bottom: 4rem; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; max-width: 1100px;
+  }
+  .service-card {
+    background: var(--white); border-radius: 2px;
+    padding: 2.5rem 2rem; border: 1px solid rgba(0,0,0,0.06);
+    transition: all var(--transition); cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: var(--red);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--transition);
+  }
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    font-size: 2rem; margin-bottom: 1.5rem;
+    width: 56px; height: 56px; background: var(--mist);
+    display: flex; align-items: center; justify-content: center; border-radius: 2px;
+  }
+  .service-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem;
+  }
+  .service-card p { color: var(--slate); font-size: 0.9rem; line-height: 1.8; font-weight: 300; }
+
+  /* ── MEMBERSHIP ── */
+  #membership { background: var(--deep); color: var(--white); }
+  #membership .section-label { color: var(--gold); }
+  #membership .section-label::before { background: var(--gold); }
+  #membership h2 { color: var(--white); }
+  .membership-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start;
+    max-width: 1100px; margin-top: 3rem;
+  }
+  .membership-steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    padding: 1.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+    opacity: 0; transform: translateX(-20px);
+    transition: all 0.5s ease;
+  }
+  .step.visible { opacity: 1; transform: translateX(0); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900; color: var(--red);
+    line-height: 1; min-width: 50px;
+  }
+  .step-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--white);
+  }
+  .step-content p { font-size: 0.87rem; color: rgba(255,255,255,0.55); line-height: 1.7; font-weight: 300; }
+
+  .membership-aside {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 2px; padding: 2.5rem;
+  }
+  .membership-aside h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; margin-bottom: 1.5rem; color: var(--gold);
+  }
+  .benefit-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .benefit-list li {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.6; font-weight: 300;
+  }
+  .benefit-list li::before {
+    content: '✦'; color: var(--gold); font-size: 0.6rem; margin-top: 0.4rem; flex-shrink: 0;
+  }
+  .membership-cta {
+    margin-top: 2rem; background: var(--red); color: var(--white);
+    padding: 0.9rem 2rem; border-radius: 2px; display: inline-block;
+    text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background var(--transition);
+  }
+  .membership-cta:hover { background: #a01818; }
+
+  /* ── BOARD / LEADERSHIP ── */
+  #board { background: var(--white); }
+  .board-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem; max-width: 1100px; margin-top: 3rem;
+  }
+  .board-card {
+    text-align: center; padding: 2rem 1.5rem;
+    border: 1px solid rgba(0,0,0,0.06); border-radius: 2px;
+    transition: all var(--transition);
+  }
+  .board-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); transform: translateY(-4px); }
+  .board-avatar {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900;
+    color: var(--white);
+  }
+  .board-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .board-card p { font-size: 0.75rem; color: var(--red); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--mist); }
+  .contact-wrap {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start;
+    max-width: 1100px;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .contact-item-icon {
+    width: 44px; height: 44px; background: var(--white);
+    border-radius: 2px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .contact-item-text h4 {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--red); font-weight: 500; margin-bottom: 0.3rem;
+  }
+  .contact-item-text p, .contact-item-text a {
+    font-size: 0.95rem; color: var(--slate); text-decoration: none; line-height: 1.6; font-weight: 300;
+  }
+  .contact-item-text a:hover { color: var(--red); }
+
+  .contact-form {
+    background: var(--white); border-radius: 2px; padding: 2.5rem;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .contact-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .form-group label {
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--slate); font-weight: 500;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    border: 1px solid rgba(0,0,0,0.12); border-radius: 2px;
+    padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    color: var(--deep); background: var(--mist);
+    transition: border-color var(--transition), background var(--transition);
+    outline: none; appearance: none;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--red); background: var(--white);
+  }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-submit {
+    width: 100%; background: var(--red); color: var(--white);
+    border: none; padding: 0.9rem; border-radius: 2px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background var(--transition); margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: #a01818; }
+  .form-success {
+    display: none; text-align: center; padding: 2rem;
+    color: var(--water); font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep); color: rgba(255,255,255,0.5);
+    padding: 3rem 4rem; display: flex;
+    justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .footer-brand img { height: 36px; width: 36px; object-fit: contain; }
+  .footer-brand span {
+    font-family: 'Playfair Display', serif; font-size: 1rem;
+    font-weight: 900; color: var(--white);
+  }
+  footer p { font-size: 0.75rem; letter-spacing: 0.06em; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    color: rgba(255,255,255,0.4); text-decoration: none;
+    font-size: 0.75rem; letter-spacing: 0.08em;
+    transition: color var(--transition);
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE MENU ── */
+  .mobile-menu {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--white); z-index: 99;
+    flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--deep);
+    text-decoration: none; transition: color var(--transition);
+  }
+  .mobile-menu a:hover { color: var(--red); }
+  .mobile-close {
+    position: absolute; top: 1.5rem; right: 2rem;
+    background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--deep);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    #home { grid-template-columns: 1fr; padding: 7rem 1.5rem 8rem; text-align: center; }
+    .hero-sub { max-width: 100%; }
+    .hero-actions { justify-content: center; }
+    .hero-visual { margin-top: 3rem; }
+    .hero-stats { flex-wrap: wrap; gap: 1.5rem; left: 1.5rem; right: 1.5rem; }
+    section { padding: 5rem 1.5rem; }
+    .about-grid, .membership-grid, .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+    .about-img-block { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <img src="/mnt/user-data/uploads/40b1e717-174e-437d-b52e-ff75499176ea.png" alt="ORWAMCO Logo" onerror="this.style.display='none'">
+    <div class="nav-logo-text">
+      <span>ORWAMCO</span>
+      <span>Capas, Tarlac</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#board">Leadership</a></li>
+    <li><a href="#membership">Membership</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="#home" onclick="toggleMenu()">Home</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#board" onclick="toggleMenu()">Leadership</a>
+  <a href="#membership" onclick="toggleMenu()">Membership</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Capas, Tarlac · Since 1994</div>
+    <h1>Water &amp; Welfare for <em>Every Member</em></h1>
+    <p class="hero-sub">ORWAMCO is a member-owned cooperative delivering clean, reliable water services and financial solidarity to the O'Donnell Resettlement community.</p>
+    <div class="hero-actions">
+      <a href="#membership" class="btn-primary">Become a Member</a>
+      <a href="#about" class="btn-outline">Learn More</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-logo-wrap">
+      <img src="/mnt/user-data/uploads/40b1e717-174e-437d-b52e-ff75499176ea.png" alt="ORWAMCO Seal">
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">1,200+</span><span class="stat-label">Member Households</span></div>
+    <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Years of Service</span></div>
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Water Supply</span></div>
+    <div class="stat"><span class="stat-num">CDA</span><span class="stat-label">Registered Cooperative</span></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-block reveal">
+      <div class="about-img-inner">
+        <div class="about-badge">CDA Registered</div>
+        <div class="about-icon-row">
+          <div class="about-icon">💧</div>
+          <div class="about-icon">🏠</div>
+          <div class="about-icon">🤝</div>
+        </div>
+        <p class="about-quote">"We believe that access to clean water is not a privilege — it is a right every family in our community deserves."</p>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">About Us</div>
+      <h2>Built by the <em>Community</em>, For the Community</h2>
+      <p>The O'Donnell Resettlement Waterworks Multipurpose Cooperative — <strong>ORWAMCO</strong> — is a fully registered, member-owned cooperative located in Capas, Tarlac. We were founded on the principle that community members, when organized, can govern their own essential services better than any outside entity.</p>
+      <p>As a <strong>water service provider</strong>, we manage the water distribution system ensuring clean and reliable supply to every connected household in the resettlement area. As a <strong>multipurpose credit cooperative</strong>, we allow members to pool their savings, access low-interest loans, and build collective financial resilience.</p>
+      <p>Our cooperative is governed democratically by its members — every member has a voice, every vote counts equally.</p>
+      <div class="about-pills">
+        <span class="pill">Democratic Governance</span>
+        <span class="pill">Cooperative Principles</span>
+        <span class="pill">Open Membership</span>
+        <span class="pill">Community-Driven</span>
+        <span class="pill">Financial Solidarity</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header reveal">
+    <div class="section-label">Our Services</div>
+    <h2>What We <em>Offer</em></h2>
+    <p style="color:var(--slate);font-size:0.98rem;line-height:1.8;font-weight:300;margin-top:0.5rem;">From reliable water distribution to member savings programs, ORWAMCO provides essential services that strengthen the O'Donnell Resettlement community.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">💧</div>
+      <h3>Water Distribution</h3>
+      <p>We manage and maintain the community water system, ensuring safe, potable water reaches every connected household efficiently and consistently.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🏦</div>
+      <h3>Savings Program</h3>
+      <p>Members can deposit and grow their savings within the cooperative, earning dividends while contributing to the community's collective financial strength.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📋</div>
+      <h3>Low-Interest Loans</h3>
+      <p>Access to affordable credit for members — for emergencies, livelihood projects, education, or home improvements — with fair and transparent terms.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🔧</div>
+      <h3>System Maintenance</h3>
+      <p>Our technical team regularly inspects, repairs, and upgrades water infrastructure to ensure uninterrupted service and water quality compliance.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📑</div>
+      <h3>Billing & Payments</h3>
+      <p>Transparent, fair monthly billing for water consumption. Members can settle payments conveniently at our office or through authorized channels.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🌱</div>
+      <h3>Livelihood Support</h3>
+      <p>Special financial programs and cooperative initiatives designed to help members develop sustainable income sources and improve their quality of life.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP / BOARD -->
+<section id="board">
+  <div class="section-label reveal">Leadership</div>
+  <h2 class="reveal">Governing <em>Board</em> of Directors</h2>
+  <p class="reveal" style="color:var(--slate);font-size:0.98rem;line-height:1.8;font-weight:300;margin-top:0.5rem;max-width:600px;">Elected by and from our membership, the Board of Directors upholds cooperative principles and steers ORWAMCO toward sustainable community service.</p>
+  <div class="board-grid">
+    <div class="board-card reveal">
+      <div class="board-avatar">C</div>
+      <h4>Chairperson</h4>
+      <p>Board of Directors</p>
+    </div>
+    <div class="board-card reveal">
+      <div class="board-avatar">V</div>
+      <h4>Vice-Chairperson</h4>
+      <p>Board of Directors</p>
+    </div>
+    <div class="board-card reveal">
+      <div class="board-avatar">S</div>
+      <h4>Secretary</h4>
+      <p>Board of Directors</p>
+    </div>
+    <div class="board-card reveal">
+      <div class="board-avatar">T</div>
+      <h4>Treasurer</h4>
+      <p>Board of Directors</p>
+    </div>
+    <div class="board-card reveal">
+      <div class="board-avatar">A</div>
+      <h4>Auditor</h4>
+      <p>Board of Directors</p>
+    </div>
+  </div>
+  <p class="reveal" style="margin-top:2rem;color:var(--slate);font-size:0.82rem;font-style:italic;">Board members are elected annually by the general assembly of cooperative members. Contact us for the current roster.</p>
+</section>
+
+<!-- MEMBERSHIP -->
+<section id="membership">
+  <div class="section-label">Membership</div>
+  <h2>Join the <em>Cooperative</em></h2>
+  <p style="color:rgba(255,255,255,0.55);font-size:0.98rem;line-height:1.8;font-weight:300;max-width:580px;margin-top:0.5rem;">Membership is open to all residents of the O'Donnell Resettlement area. Joining is simple, and the benefits last a lifetime.</p>
+  <div class="membership-grid">
+    <div class="membership-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>Attend an Orientation</h4>
+          <p>Visit the ORWAMCO office to attend a free membership orientation and learn about your rights and responsibilities as a cooperative member.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>Submit Requirements</h4>
+          <p>Provide a valid government-issued ID, proof of residency in the O'Donnell Resettlement area, and a completed membership application form.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Pay Initial Share Capital</h4>
+          <p>Make the initial share capital contribution — a one-time payment that entitles you to full membership and a stake in the cooperative.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h4>Welcome to ORWAMCO</h4>
+          <p>Receive your membership certificate, passbook, and begin enjoying all services, voting rights, and benefits as a full cooperative member.</p>
+        </div>
+      </div>
+    </div>
+    <div class="membership-aside">
+      <h3>Member Benefits</h3>
+      <ul class="benefit-list">
+        <li>Access to safe and reliable water supply at regulated rates</li>
+        <li>Low-interest loans for personal, livelihood, and emergency needs</li>
+        <li>Annual dividend based on share capital and patronage</li>
+        <li>Right to vote and run for the Board of Directors</li>
+        <li>Access to cooperative savings and time-deposit programs</li>
+        <li>Participation in General Assembly and community decisions</li>
+        <li>Financial education and cooperative development programs</li>
+      </ul>
+      <a href="#contact" class="membership-cta">Inquire About Membership</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">Contact Us</div>
+  <h2 class="reveal">Get in <em>Touch</em></h2>
+  <div class="contact-wrap" style="margin-top:3rem;">
+    <div class="contact-info">
+      <div class="contact-item reveal">
+        <div class="contact-item-icon">📍</div>
+        <div class="contact-item-text">
+          <h4>Office Address</h4>
+          <p>O'Donnell Resettlement Area<br>Capas, Tarlac, Philippines</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-item-icon">🕐</div>
+        <div class="contact-item-text">
+          <h4>Office Hours</h4>
+          <p>Monday – Friday: 8:00 AM – 5:00 PM<br>Saturday: 8:00 AM – 12:00 PM</p>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-item-icon">📞</div>
+        <div class="contact-item-text">
+          <h4>Phone</h4>
+          <a href="tel:+63">Contact office for current number</a>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-item-icon">✉️</div>
+        <div class="contact-item-text">
+          <h4>Email</h4>
+          <a href="mailto:info@orwamco.coop">info@orwamco.coop</a>
+        </div>
+      </div>
+      <div class="contact-item reveal">
+        <div class="contact-item-icon">🏛️</div>
+        <div class="contact-item-text">
+          <h4>Registration</h4>
+          <p>Registered with the Cooperative Development Authority (CDA)</p>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <h3>Send Us a Message</h3>
+      <div id="contactFormWrap">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Juan">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="dela Cruz">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@email.com">
+        </div>
+        <div class="form-group">
+          <label>Inquiry Type</label>
+          <select>
+            <option value="">Select a topic</option>
+            <option>Water Service / Connection</option>
+            <option>Membership Application</option>
+            <option>Loan Inquiry</option>
+            <option>Billing Concern</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us how we can help you…"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Send Message</button>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div style="font-size:2rem;margin-bottom:1rem;">💧</div>
+        <strong>Message Received!</strong><br>
+        <span style="font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--slate);font-style:normal;">Thank you for reaching out. We will get back to you within 1–2 business days.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="/mnt/user-data/uploads/40b1e717-174e-437d-b52e-ff75499176ea.png" alt="ORWAMCO" onerror="this.style.display='none'">
+    <span>ORWAMCO</span>
+  </div>
+  <p>© 2025 O'Donnell Resettlement Waterworks Multipurpose Cooperative. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#membership">Membership</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll shadow
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal, .step');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const delay = e.target.classList.contains('step') ? 
+          [...document.querySelectorAll('.step')].indexOf(e.target) * 120 : 0;
+        setTimeout(() => e.target.classList.add('visible'), delay);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Stagger service cards
+  document.querySelectorAll('.service-card.reveal').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 80}ms`;
+  });
+
+  // Form submit
+  function submitForm() {
+    document.getElementById('contactFormWrap').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--red)' : '';
+    });
+  });
+</script>
+</body>
+</html>
